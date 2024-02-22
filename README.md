@@ -3,5 +3,5 @@
 ```py
 git clone https://github.com/Bt08s/NetStrike.git
 cd NetStrike
-python3 main.py
+python main.py
 ```
