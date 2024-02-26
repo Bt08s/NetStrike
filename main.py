@@ -138,6 +138,9 @@ def main():
         if cmd:
             if cmd[0] == "help" or cmd[0] == "?":
                 print(commands)
+            elif cmd[0] == "clear":
+                clear()
+
             elif cmd[0] == "udp":
                 udp_flood(cmd[1], int(cmd[2]), int(cmd[3]))
             elif cmd[0] == "syn":
