@@ -6,7 +6,7 @@ python NetStrike.py
 ```
 
 ```py
-# With TOR
+# Use with TOR
 sudo apt-get update
 sudo apt-get install tor -y
 sudo apt-get install torsocks -y
